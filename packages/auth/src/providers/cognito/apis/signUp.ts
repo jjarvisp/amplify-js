@@ -47,10 +47,8 @@ export async function signUp(input: SignUpInput): Promise<SignUpOutput> {
 		authConfig?.signUpVerificationMethod ?? 'code';
 	const { clientMetadata, validationData, autoSignIn } = input.options ?? {};
 	assertTokenProviderConfig(authConfig);
-	assertValidationError(
-		!!username,
-		AuthValidationErrorCode.EmptySignUpUsername,
-	);
+	console.log(input);
+	assertValidationError(!username, AuthValidationErrorCode.EmptySignUpUsername);
 	assertValidationError(
 		!!password,
 		AuthValidationErrorCode.EmptySignUpPassword,
