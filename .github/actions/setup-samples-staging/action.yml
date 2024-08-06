@@ -32,7 +32,8 @@ runs:
       shell: bash
       working-directory: ./amplify-js-samples-staging
       env:
-        BRANCH: ${{ github.ref_name }}
+        # BRANCH: ${{ github.ref_name }}
+        BRANCH: test/mb-integ-update
       run: |
         if git ls-remote --exit-code --heads origin refs/heads/$BRANCH; then
             # Corresponding branch on sample repo exists, check it out

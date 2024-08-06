@@ -8,7 +8,7 @@ concurrency:
 on:
   push:
     branches:
-      - test/mb-integ-update
+      - feat/multi-bucket-test-run
 
 jobs:
   e2e:
