@@ -62,11 +62,11 @@ jobs:
       #   run: |
       #     xcrun simctl boot "iPhone 15" &
       #   shell: bash
-      - name: Start Metro Packager (background)
-        run: |
-          yarn start &
-        working-directory: ${{ inputs.working_directory }}
-        shell: bash
+      # - name: Start Metro Packager (background)
+      #   run: |
+      #     yarn start &
+      #   working-directory: ${{ inputs.working_directory }}
+      #   shell: bash
       - name: Configure Detox
         env:
           HOMEBREW_NO_AUTO_UPDATE: '1'
@@ -94,6 +94,6 @@ jobs:
         env:
           VERSION: ${{ format('ios.sim.debug.iOS-{0}', matrix.version) }}
         run: |
-          $GITHUB_WORKSPACE/amplify-js/scripts/retry-yarn-script.sh -s 'detox test -c $VERSION -u' -n 3
+          $GITHUB_WORKSPACE/amplify-js/scripts/retry-yarn-script.sh -s "detox test -c $VERSION -u" -n 3
         working-directory: ${{ inputs.working_directory }}
         shell: bash
