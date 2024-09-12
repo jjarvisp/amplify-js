@@ -1,7 +1,7 @@
 - test_name: 'integ_rn_ios_storage'
   working_directory: amplify-js-samples-staging/samples/react-native/storage/StorageApp
   timeout_minutes: 120
-  versions: [15, 17]
+  versions: [17, 18]
 # - test_name: 'integ_rn_ios_storage_multipart_progress'
 #   working_directory: amplify-js-samples-staging/samples/react-native/storage/MultiPartUploadWithProgress
 #   timeout_minutes: 120
