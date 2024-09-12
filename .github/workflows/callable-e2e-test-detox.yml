@@ -82,7 +82,7 @@ jobs:
         env:
           JEST_JUNIT_OUTPUT_DIR: reports/junit
           JEST_JUNIT_OUTPUT_NAME: detox-test-results.xml
-          VERSION: join(['ios.sim.debug', matrix.version], '.')
+          VERSION: ${{ join(['ios.sim.debug', matrix.version], '.') }}
         working-directory: ${{ inputs.working_directory }}
         shell: bash
       - name: Start the http-server and host the oidc signout page locally (background).
@@ -92,7 +92,7 @@ jobs:
         shell: bash
       - name: Detox run
         env:
-          VERSION: join(['ios.sim.debug', matrix.version], '.')
+          VERSION: ${{ join(['ios.sim.debug', matrix.version], '.') }}
         run: |
           $GITHUB_WORKSPACE/amplify-js/scripts/retry-yarn-script.sh -s 'detox test -c $VERSION -u' -n 3
         working-directory: ${{ inputs.working_directory }}
