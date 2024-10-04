@@ -3,6 +3,10 @@ import {
 	PasskeyCreateOptionsJson,
 	PasskeyCreateResult,
 	PasskeyCreateResultJson,
+	PasskeyGetOptions,
+	PasskeyGetOptionsJson,
+	PasskeyGetResult,
+	PasskeyGetResultJson,
 } from '../src/client/utils/passkey/types';
 
 // device tracking mock device data
@@ -272,5 +276,73 @@ export const passkeyRegistrationRequestJson: PasskeyCreateOptionsJson = {
 		requireResidentKey: true,
 		residentKey: 'required',
 		userVerification: 'required',
+	},
+};
+
+export const passkeyCredentialRequestOptions =
+	'{"hints":[],"attestation":"none","attestationFormats":[],"challenge":"9DAxgg4vPiaxvAxc-JbMuw","timeout":180000,"rpId":"localhost","allowCredentials":[{"id":"1oG8PrTycHFuWdHAjIelCnsVx7XsrGIL44Whwr_8F8k","type":"public-key"}],"userVerification":"required"}';
+
+export const passkeyGetOptionsJson: PasskeyGetOptionsJson = {
+	challenge: 'vJCit9S2cglAvvW3txQ-OQ',
+	rpId: 'localhost',
+	timeout: 180000,
+	allowCredentials: [
+		{
+			id: 'vJCit9S2cglAvvW3txQ-OQ',
+			type: 'public-key',
+		},
+	],
+	userVerification: 'required',
+};
+
+export const passkeyGetOptions: PasskeyGetOptions = {
+	challenge: new Uint8Array([
+		188, 144, 162, 183, 212, 182, 114, 9, 64, 190, 245, 183, 183, 20, 62, 57,
+	]),
+	rpId: 'localhost',
+	timeout: 180000,
+	allowCredentials: [
+		{
+			id: new Uint8Array([
+				188, 144, 162, 183, 212, 182, 114, 9, 64, 190, 245, 183, 183, 20, 62,
+				57,
+			]),
+			type: 'public-key',
+		},
+	],
+	userVerification: 'required',
+};
+
+export const passkeyGetResultJson: PasskeyGetResultJson = {
+	type: 'public-key',
+	id: 'vJCit9S2cglAvvW3txQ-OQ',
+	rawId: 'vJCit9S2cglAvvW3txQ-OQ',
+	response: {
+		authenticatorData: 'vJCit9S2cglAvvW3txQ-OQ',
+		clientDataJSON: 'vJCit9S2cglAvvW3txQ-OQ',
+		signature: 'vJCit9S2cglAvvW3txQ-OQ',
+		userHandle: 'vJCit9S2cglAvvW3txQ-OQ',
+	},
+};
+
+export const passkeyGetResult: PasskeyGetResult = {
+	type: 'public-key',
+	id: 'vJCit9S2cglAvvW3txQ-OQ',
+	rawId: new Uint8Array([
+		188, 144, 162, 183, 212, 182, 114, 9, 64, 190, 245, 183, 183, 20, 62, 57,
+	]),
+	response: {
+		authenticatorData: new Uint8Array([
+			188, 144, 162, 183, 212, 182, 114, 9, 64, 190, 245, 183, 183, 20, 62, 57,
+		]),
+		clientDataJSON: new Uint8Array([
+			188, 144, 162, 183, 212, 182, 114, 9, 64, 190, 245, 183, 183, 20, 62, 57,
+		]),
+		signature: new Uint8Array([
+			188, 144, 162, 183, 212, 182, 114, 9, 64, 190, 245, 183, 183, 20, 62, 57,
+		]),
+		userHandle: new Uint8Array([
+			188, 144, 162, 183, 212, 182, 114, 9, 64, 190, 245, 183, 183, 20, 62, 57,
+		]),
 	},
 };

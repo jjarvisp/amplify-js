@@ -4,7 +4,7 @@
 import { PasskeyCreateOptionsJson, PasskeyCreateResult } from './types';
 import {
 	deserializeJsonToPkcCreationOptions,
-	serializePkcToJson,
+	serializePkcWithAttestationToJson,
 } from './serde';
 import { PasskeyErrorCode, assertPasskeyError } from './errors';
 import { getIsPasskeySupported } from './getIsPasskeySupported';
@@ -27,5 +27,5 @@ export const registerPasskey = async (input: PasskeyCreateOptionsJson) => {
 
 	assertPasskeyError(!!credential, PasskeyErrorCode.PasskeyRegistrationFailed);
 
-	return serializePkcToJson(credential);
+	return serializePkcWithAttestationToJson(credential);
 };

@@ -23,7 +23,9 @@ export class PasskeyError extends AmplifyError {
 export enum PasskeyErrorCode {
 	PasskeyNotSupported = 'PasskeyNotSupported',
 	InvalidCredentialCreationOptions = 'InvalidCredentialCreationOptions',
+	InvalidCredentialRequestOptions = 'InvalidCredentialRequestOptions',
 	PasskeyRegistrationFailed = 'PasskeyRegistrationFailed',
+	PasskeyAssertionFailed = 'PasskeyAssertionFailed',
 }
 
 const passkeyErrorMap: AmplifyErrorMap<PasskeyErrorCode> = {
@@ -37,8 +39,14 @@ const passkeyErrorMap: AmplifyErrorMap<PasskeyErrorCode> = {
 		recoverySuggestion:
 			'Ensure your user pool is configured to support WebAuthN passkey registration',
 	},
+	[PasskeyErrorCode.InvalidCredentialRequestOptions]: {
+		message: 'Invalid credential request options',
+	},
 	[PasskeyErrorCode.PasskeyRegistrationFailed]: {
 		message: 'Device failed to create credentials',
+	},
+	[PasskeyErrorCode.PasskeyAssertionFailed]: {
+		message: 'Device failed to validate credentials',
 	},
 };
 

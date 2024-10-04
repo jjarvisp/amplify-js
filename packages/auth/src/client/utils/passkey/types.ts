@@ -4,6 +4,12 @@
 type PasskeyTransport = 'ble' | 'hybrid' | 'internal' | 'nfc' | 'usb';
 type UserVerificationRequirement = 'discouraged' | 'preferred' | 'required';
 
+interface PublicKeyCredentialDescriptor<T> {
+	type: 'public-key';
+	id: T;
+	transports?: PasskeyTransport[];
+}
+
 export interface PasskeyCreateOptionsJson {
 	challenge: string;
 	rp: {
@@ -20,11 +26,7 @@ export interface PasskeyCreateOptionsJson {
 		type: 'public-key';
 	}[];
 	timeout: number;
-	excludeCredentials: {
-		type: 'public-key';
-		id: string;
-		transports?: PasskeyTransport[];
-	}[];
+	excludeCredentials: PublicKeyCredentialDescriptor<string>[];
 	authenticatorSelection: {
 		requireResidentKey: boolean;
 		residentKey: UserVerificationRequirement;
@@ -48,11 +50,7 @@ export interface PasskeyCreateOptions {
 		type: 'public-key';
 	}[];
 	timeout: number;
-	excludeCredentials: {
-		type: 'public-key';
-		id: ArrayBuffer;
-		transports?: PasskeyTransport[];
-	}[];
+	excludeCredentials: PublicKeyCredentialDescriptor<ArrayBuffer>[];
 	authenticatorSelection: {
 		requireResidentKey: boolean;
 		residentKey: UserVerificationRequirement;
@@ -60,22 +58,56 @@ export interface PasskeyCreateOptions {
 	};
 }
 
+export interface PublicKeyCredentialAttestationResponse<T> {
+	clientDataJSON: T;
+	attestationObject: T;
+}
 export interface PasskeyCreateResult {
 	id: string;
 	rawId: ArrayBuffer;
 	type: 'public-key';
-	response: {
-		clientDataJSON: ArrayBuffer;
-		attestationObject: ArrayBuffer;
-	};
+	response: PublicKeyCredentialAttestationResponse<ArrayBuffer>;
 }
 
 export interface PasskeyCreateResultJson {
 	id: string;
 	rawId: string;
 	type: 'public-key';
-	response: {
-		clientDataJSON: string;
-		attestationObject: string;
-	};
+	response: PublicKeyCredentialAttestationResponse<string>;
+}
+
+export interface PasskeyGetOptionsJson {
+	challenge: string;
+	rpId: string;
+	timeout: number;
+	allowCredentials: PublicKeyCredentialDescriptor<string>[];
+	userVerification: UserVerificationRequirement;
+}
+
+export interface PasskeyGetOptions {
+	challenge: ArrayBuffer;
+	rpId: string;
+	timeout: number;
+	allowCredentials: PublicKeyCredentialDescriptor<ArrayBuffer>[];
+	userVerification: UserVerificationRequirement;
+}
+
+export interface PublicKeyCredentialAssertionResponse<T> {
+	authenticatorData: T;
+	clientDataJSON: T;
+	signature: T;
+	userHandle: T;
+}
+
+export interface PasskeyGetResult {
+	id: string;
+	rawId: ArrayBuffer;
+	type: 'public-key';
+	response: PublicKeyCredentialAssertionResponse<ArrayBuffer>;
+}
+export interface PasskeyGetResultJson {
+	id: string;
+	rawId: string;
+	type: 'public-key';
+	response: PublicKeyCredentialAssertionResponse<string>;
 }

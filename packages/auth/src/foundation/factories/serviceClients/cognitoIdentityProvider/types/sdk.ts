@@ -16,7 +16,8 @@ export type ChallengeName =
 	| 'DEVICE_SRP_AUTH'
 	| 'DEVICE_PASSWORD_VERIFIER'
 	| 'ADMIN_NO_SRP_AUTH'
-	| 'NEW_PASSWORD_REQUIRED';
+	| 'NEW_PASSWORD_REQUIRED'
+	| 'WEB_AUTHN';
 
 export type ChallengeParameters = {
 	CODE_DELIVERY_DESTINATION?: string;
@@ -27,6 +28,7 @@ export type ChallengeParameters = {
 	PASSWORD_CLAIM_SIGNATURE?: string;
 	MFAS_CAN_CHOOSE?: string;
 	MFAS_CAN_SETUP?: string;
+	CREDENTIAL_REQUEST_OPTIONS?: string;
 } & Record<string, unknown>;
 
 export type CognitoMFAType = 'SMS_MFA' | 'SOFTWARE_TOKEN_MFA' | 'EMAIL_OTP';

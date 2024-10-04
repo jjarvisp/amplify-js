@@ -14,7 +14,7 @@ import {
 	passkeyCredentialCreateOptions,
 	passkeyRegistrationResult,
 } from '../../mockData';
-import { serializePkcToJson } from '../../../src/client/utils/passkey/serde';
+import { serializePkcWithAttestationToJson } from '../../../src/client/utils/passkey/serde';
 import * as utils from '../../../src/client/utils';
 import { getIsPasskeySupported } from '../../../src/client/utils/passkey/getIsPasskeySupported';
 import { setUpGetConfig } from '../../providers/cognito/testUtils/setUpGetConfig';
@@ -121,7 +121,7 @@ describe('associateWebAuthnCredential', () => {
 			{
 				AccessToken: mockAccessToken,
 				Credential: JSON.stringify(
-					serializePkcToJson(passkeyRegistrationResult),
+					serializePkcWithAttestationToJson(passkeyRegistrationResult),
 				),
 			},
 		);

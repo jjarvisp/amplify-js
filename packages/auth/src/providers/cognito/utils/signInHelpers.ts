@@ -50,8 +50,18 @@ import {
 	RespondToAuthChallengeCommandOutput,
 } from '../../../foundation/factories/serviceClients/cognitoIdentityProvider/types';
 import { getRegionFromUserPoolId } from '../../../foundation/parsers';
+import { cacheCognitoTokens } from '../tokenProvider/cacheTokens';
+import {
+	PasskeyErrorCode,
+	assertPasskeyError,
+} from '../../../client/utils/passkey/errors';
+import { getPasskey } from '../../../client/utils/passkey';
 
-import { signInStore } from './signInStore';
+import {
+	cleanActiveSignInState,
+	setActiveSignInState,
+	signInStore,
+} from './signInStore';
 import { assertDeviceMetadata } from './types';
 import {
 	getAuthenticationHelper,
@@ -62,6 +72,7 @@ import {
 import { BigInteger } from './srp/BigInteger';
 import { AuthenticationHelper } from './srp/AuthenticationHelper';
 import { getUserContextData } from './userContextData';
+import { dispatchSignedInHubEvent } from './dispatchSignedInHubEvent';
 
 const USER_ATTRIBUTES = 'userAttributes.';
 
@@ -934,6 +945,9 @@ export async function getSignInResult(params: {
 					},
 				},
 			};
+
+		case 'WEB_AUTHN':
+			return handleWebAuthnSignInResult(challengeParameters);
 		case 'ADMIN_NO_SRP_AUTH':
 			break;
 		case 'DEVICE_PASSWORD_VERIFIER':
@@ -1303,4 +1317,98 @@ export async function handleMFAChallenge({
 		},
 		jsonReq,
 	);
+}
+
+export async function handleWebAuthnSignInResult(
+	challengeParameters: ChallengeParameters,
+): Promise<AuthSignInOutput> {
+	const authConfig = Amplify.getConfig().Auth?.Cognito;
+	assertTokenProviderConfig(authConfig);
+	const { username, signInSession, signInDetails, challengeName } =
+		signInStore.getState();
+
+	if (challengeName !== 'WEB_AUTHN' || !username) {
+		throw new AuthError({
+			name: AuthErrorCodes.SignInException,
+			message: 'An error occurred during the sign in process.',
+		});
+	}
+
+	const { CREDENTIAL_REQUEST_OPTIONS: credentialRequestOptions } =
+		challengeParameters;
+
+	assertPasskeyError(
+		!!credentialRequestOptions,
+		PasskeyErrorCode.InvalidCredentialRequestOptions,
+	);
+
+	const cred = await getPasskey(JSON.parse(credentialRequestOptions));
+
+	const respondToAuthChallenge = createRespondToAuthChallengeClient({
+		endpointResolver: createCognitoUserPoolEndpointResolver({
+			endpointOverride: authConfig.userPoolEndpoint,
+		}),
+	});
+
+	const {
+		ChallengeName: nextChallengeName,
+		ChallengeParameters: nextChallengeParameters,
+		AuthenticationResult: authenticationResult,
+		Session: nextSession,
+	} = await respondToAuthChallenge(
+		{
+			region: getRegionFromUserPoolId(authConfig.userPoolId),
+			userAgentValue: getAuthUserAgentValue(AuthAction.ConfirmSignIn),
+		},
+		{
+			ChallengeName: 'WEB_AUTHN',
+			ChallengeResponses: {
+				USERNAME: username,
+				CREDENTIAL: JSON.stringify(cred),
+			},
+			ClientId: authConfig.userPoolClientId,
+			Session: signInSession,
+		},
+	);
+
+	setActiveSignInState({
+		signInSession: nextSession,
+		username,
+		challengeName: nextChallengeName as ChallengeName,
+		signInDetails,
+	});
+
+	if (authenticationResult) {
+		await cacheCognitoTokens({
+			...authenticationResult,
+			username,
+			NewDeviceMetadata: await getNewDeviceMetadata({
+				userPoolId: authConfig.userPoolId,
+				userPoolEndpoint: authConfig.userPoolEndpoint,
+				newDeviceMetadata: authenticationResult.NewDeviceMetadata,
+				accessToken: authenticationResult.AccessToken,
+			}),
+			signInDetails,
+		});
+		cleanActiveSignInState();
+		await dispatchSignedInHubEvent();
+
+		return {
+			isSignedIn: true,
+			nextStep: { signInStep: 'DONE' },
+		};
+	}
+
+	if (nextChallengeName === 'WEB_AUTHN') {
+		throw new AuthError({
+			name: AuthErrorCodes.SignInException,
+			message:
+				'Sequential WEB_AUTHN challenges returned from underlying service cannot be handled.',
+		});
+	}
+
+	return getSignInResult({
+		challengeName: nextChallengeName as ChallengeName,
+		challengeParameters: nextChallengeParameters as ChallengeParameters,
+	});
 }
