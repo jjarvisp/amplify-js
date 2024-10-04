@@ -1330,7 +1330,7 @@ export async function handleWebAuthnSignInResult(
 	if (challengeName !== 'WEB_AUTHN' || !username) {
 		throw new AuthError({
 			name: AuthErrorCodes.SignInException,
-			message: 'An error occurred during the sign in process.',
+			message: 'Unable to proceed due to invalid sign in state.',
 		});
 	}
 

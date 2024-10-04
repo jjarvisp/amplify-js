@@ -25,7 +25,7 @@ export enum PasskeyErrorCode {
 	InvalidCredentialCreationOptions = 'InvalidCredentialCreationOptions',
 	InvalidCredentialRequestOptions = 'InvalidCredentialRequestOptions',
 	PasskeyRegistrationFailed = 'PasskeyRegistrationFailed',
-	PasskeyAssertionFailed = 'PasskeyAssertionFailed',
+	PasskeyRetrievalFailed = 'PasskeyRetrievalFailed',
 }
 
 const passkeyErrorMap: AmplifyErrorMap<PasskeyErrorCode> = {
@@ -45,8 +45,8 @@ const passkeyErrorMap: AmplifyErrorMap<PasskeyErrorCode> = {
 	[PasskeyErrorCode.PasskeyRegistrationFailed]: {
 		message: 'Device failed to create credentials',
 	},
-	[PasskeyErrorCode.PasskeyAssertionFailed]: {
-		message: 'Device failed to validate credentials',
+	[PasskeyErrorCode.PasskeyRetrievalFailed]: {
+		message: 'Device failed to retrieve credentials',
 	},
 };
 

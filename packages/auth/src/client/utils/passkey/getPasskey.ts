@@ -20,7 +20,7 @@ export const getPasskey = async (input: PasskeyGetOptionsJson) => {
 		publicKey: passkeyGetOptions,
 	})) as PasskeyGetResult | null;
 
-	assertPasskeyError(!!credential, PasskeyErrorCode.PasskeyRegistrationFailed);
+	assertPasskeyError(!!credential, PasskeyErrorCode.PasskeyRetrievalFailed);
 
 	return serializePkcWithAssertionToJson(credential);
 };
