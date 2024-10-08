@@ -7,6 +7,12 @@ import {
 	assertTokenProviderConfig,
 } from '@aws-amplify/core/internals/utils';
 
+import {
+	// eslint-disable-next-line unused-imports/no-unused-imports
+	GetWebAuthnRegistrationOptionsException,
+	// eslint-disable-next-line unused-imports/no-unused-imports
+	VerifyWebAuthnRegistrationResultException,
+} from '../../foundation/factories/serviceClients/cognitoIdentityProvider/types';
 import { assertAuthTokens } from '../../providers/cognito/utils/types';
 import { createCognitoUserPoolEndpointResolver } from '../../providers/cognito/factories';
 import { getRegionFromUserPoolId } from '../../foundation/parsers';
@@ -28,9 +34,16 @@ import { AuthError } from '../../errors/AuthError';
 
 /**
  * Registers a new passkey for an authenticated user
+ *
  * @returns Promise<AssociateWebAuthnCredentialOutput>
- * @throws - {@link PasskeyError} Thrown when intermediate state is invalid
- * @throws - {@link AuthError} Thrown when user is unauthenticated
+ * @throws - {@link PasskeyError}:
+ * - Thrown when intermediate state is invalid
+ * @throws - {@link AuthError}:
+ * - Thrown when user is unauthenticated
+ * @throws - {@link GetWebAuthnRegistrationOptionsException}
+ * - Thrown due to a service error retrieving WebAuthn registration options
+ * @throws - {@link VerifyWebAuthnRegistrationResultException}
+ * - Thrown due to a service error when verifying WebAuthn registration result
  */
 
 export async function associateWebAuthnCredential(): Promise<AssociateWebAuthnCredentialOutput> {
