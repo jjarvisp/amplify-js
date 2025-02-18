@@ -144,5 +144,8 @@
 	"overrides": {
 		"tar": "6.2.1",
 		"cross-spawn": "7.0.5"
+	},
+	"publishConfig": {
+		"registry": "http://localhost:4873"
 	}
 }
