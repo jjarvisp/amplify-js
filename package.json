@@ -57,6 +57,7 @@
 			"packages/rtn-web-browser",
 			"packages/react-native",
 			"packages/react-native/example",
+			"packages/rtn-passkeys",
 			"scripts/tsc-compliance-test"
 		],
 		"nohoist": [
