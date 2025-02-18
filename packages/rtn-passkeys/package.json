@@ -2,21 +2,12 @@
 	"name": "@aws-amplify/rtn-passkeys",
 	"version": "0.1.0",
 	"description": "React Native module for aws-amplify webauthn support",
-	"source": "./src/index.tsx",
-	"main": "./lib/commonjs/index.js",
-	"module": "./lib/module/index.js",
-	"exports": {
-		".": {
-			"import": {
-				"types": "./lib/typescript/module/src/index.d.ts",
-				"default": "./lib/module/index.js"
-			},
-			"require": {
-				"types": "./lib/typescript/commonjs/src/index.d.ts",
-				"default": "./lib/commonjs/index.js"
-			}
-		}
-	},
+	"source": "./src/index.ts",
+	"main": "./dist/cjs/index.js",
+	"module": "./dist/esm/index.mjs",
+	"react-native": "./src/index.ts",
+	"typings": "./dist/esm/index.d.ts",
+	"sideEffects": false,
 	"files": [
 		"src",
 		"lib",
@@ -85,10 +76,5 @@
 			"javaPackageName": "com.amazonaws.amplify.rtnpasskeys"
 		},
 		"includesGeneratedCode": true
-	},
-	"create-react-native-library": {
-		"type": "turbo-module",
-		"languages": "kotlin-objc",
-		"version": "0.48.1"
 	}
 }
